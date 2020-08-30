@@ -6,7 +6,7 @@ CC = g++
 #  -Wall turns on most, but not all, compiler warnings
 CXXFLAGS= -std=c++11 -g -Wall
 
-OBJECTS = main.o
+OBJECTS = main.o FileSystem.o Node.o
 HEADERS := $(shell find . -path ./test -prune -o -name "*.hpp" -print)
 
 main: main.o $(OBJECTS)

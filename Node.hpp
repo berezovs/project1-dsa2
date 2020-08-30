@@ -1,5 +1,5 @@
 #ifndef NODE_H
-#define NNODE_H
+#define NODE_H
 #include <string>
 
 class Node{
@@ -12,6 +12,7 @@ class Node{
 
     public:
     Node();
+    Node(Node *child, Node *parent, std::string name, std::string fileType);
     Node *getChild();
     void addChild(Node *child);
     Node *getNext();

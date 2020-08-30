@@ -9,6 +9,13 @@ Node::Node(){
     this->fileType = "";
 }
 
+Node::Node(Node *child, Node *parent, std::string name, std::string fileType){
+    this->child =child;
+    this->parent=parent;
+    this->name=name;
+    this->fileType = fileType;
+}
+
 Node *Node::getChild(){
     return this->child;
 }

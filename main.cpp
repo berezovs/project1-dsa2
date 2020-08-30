@@ -1,6 +1,12 @@
 
 #include<iostream>
+#include <string>
+#include "FileSystem.hpp"
 
 int main(){
-    std::cout<<"Hello World"<<std::endl;
+   
+   FileSystem *filesystem = new FileSystem();
+   std::cout<<"$ "<<filesystem->printCurrentDirectory();
+return 0;
+
 }
