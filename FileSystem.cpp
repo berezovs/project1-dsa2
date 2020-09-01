@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "FileSystem.hpp"
 #include "Node.hpp"
 
@@ -47,7 +48,6 @@ bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
     return true;
 }
 
-
 //This function will return a string containing the names of all the files and directories in the current directory
 std::string FileSystem::listAllFiles()
 {
@@ -60,4 +60,41 @@ std::string FileSystem::listAllFiles()
         file = file->getNext();
     }
     return returnString;
+}
+
+Node *FileSystem::find(std::string name)
+{
+    Node *node = root;
+
+    return findHelper(name, node);
+}
+
+Node *FileSystem::findHelper(std::string name, Node *node)
+{
+
+    if (node)
+    {
+        if (node->getName() == name)
+        {
+            return node;
+        }
+
+        else if (node->getFileType() == "D")
+        {
+            if (node->getChild() != nullptr)
+            {
+                return findHelper(name, node->getChild());
+            }
+            else
+            {
+                return findHelper(name, node->getNext());
+            }
+        }
+        else if (node->getFileType() == "F")
+        {
+            return findHelper(name, node->getNext());
+        }
+    }
+
+    return nullptr;
 }

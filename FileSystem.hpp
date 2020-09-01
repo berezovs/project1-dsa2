@@ -14,6 +14,8 @@ void addFile(std::string name);
 std::string printCurrentDirectory();
 bool makeDirectoryOrFile(std::string name, std::string type);
 std::string listAllFiles();
+Node* find(std::string name);
+Node* findHelper(std::string name, Node* node);
 
 };
 

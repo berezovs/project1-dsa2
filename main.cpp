@@ -2,6 +2,7 @@
 #include<iostream>
 #include <string>
 #include "FileSystem.hpp"
+#include "Node.hpp"
 
 int main(){
    
@@ -14,6 +15,14 @@ int main(){
    filesystem->makeDirectoryOrFile("File2", "F");
    std::cout<<std::endl;
    std::cout<<filesystem->listAllFiles();
+   Node* node = filesystem->find("file1");
+   if(node)
+   std::cout<<node->getName()<<std::endl;
+   else
+   {
+       std::cout<<"Null result!"<<std::endl;
+   }
+   
 return 0;
 
 }
