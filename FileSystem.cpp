@@ -24,3 +24,40 @@ std::string FileSystem::printCurrentDirectory()
     stringToReturn.insert(0, "/root");
     return stringToReturn;
 }
+
+//This function will create a file/directory in the current directory after ensuring that no files or directories with the specified name already exist
+bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
+{
+    Node *directory = new Node(nullptr, current, name, type);
+
+    if (!current->getChild())
+    {
+        current->addChild(directory);
+    }
+    else
+    {
+        Node *child = current->getChild();
+        while (child->getNext())
+        {
+
+            child = child->getNext();
+        }
+        child->setNext(directory);
+    }
+    return true;
+}
+
+
+//This function will return a string containing the names of all the files and directories in the current directory
+std::string FileSystem::listAllFiles()
+{
+    std::string returnString = "";
+    Node *file = current->getChild();
+
+    while (file)
+    {
+        returnString += file->getFileType() + "\t" + file->getName() + "\n";
+        file = file->getNext();
+    }
+    return returnString;
+}

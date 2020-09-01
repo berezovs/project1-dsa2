@@ -11,8 +11,9 @@ Node *current;
 public:
 FileSystem();
 void addFile(std::string name);
-void addDirectory(std::string name);
 std::string printCurrentDirectory();
+bool makeDirectoryOrFile(std::string name, std::string type);
+std::string listAllFiles();
 
 };
 
