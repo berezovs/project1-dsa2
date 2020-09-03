@@ -136,4 +136,24 @@ Node *FileSystem::findHelper(std::string name, Node *node)
 
     return nullptr;
 }
+ bool FileSystem::rename(std::string from, std::string to){
+     Node *node = searchCurrentDirectory(from);
+    if(node){
+        node->setName(to);
+        return true;
+    }
+    return false;
+}
+
+Node* FileSystem::searchCurrentDirectory(std::string name){
+    Node *node = current->getChild();
+            while(node->getNext()){
+                if(node->getName()==name)
+                {
+                    return node;
+                }
+                node = node->getNext();
+            }
+            return nullptr;
+}
 

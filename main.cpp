@@ -15,19 +15,22 @@ int main(){
    filesystem->makeDirectoryOrFile("File2", "F");
    std::cout<<std::endl;
    std::cout<<filesystem->listAllFiles();
-   Node* node = filesystem->find("dir1");
-   if(node)
-   std::cout<<node->getName()<<std::endl;
-   else
-   {
-       std::cout<<"Null result!"<<std::endl;
-   }
-   std::cout<<filesystem->getPath(node);
+//    Node* node = filesystem->find("dir1");
+//    if(node)
+//    std::cout<<node->getName()<<std::endl;
+//    else
+//    {
+//        std::cout<<"Null result!"<<std::endl;
+//    }
+//    std::cout<<filesystem->getPath(node);
 
-   filesystem->changeDirectory("directory2");
-   std::cout<<"$ "<<filesystem->getCurrentDirectory();
-   filesystem->changeDirectory("..");
-   std::cout<<"$ "<<filesystem->getCurrentDirectory();
+//    filesystem->changeDirectory("directory2");
+//    std::cout<<"$ "<<filesystem->getCurrentDirectory();
+//    filesystem->changeDirectory("..");
+//    std::cout<<"$ "<<filesystem->getCurrentDirectory();
+
+   filesystem->rename("directory3", "dir3");
+   std::cout<<filesystem->listAllFiles()<<std::endl;
 
    
 return 0;
