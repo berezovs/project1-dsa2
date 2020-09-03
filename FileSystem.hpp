@@ -11,12 +11,13 @@ Node *current;
 public:
 FileSystem();
 void addFile(std::string name);
-std::string printCurrentDirectory();
+std::string getCurrentDirectory();
 bool makeDirectoryOrFile(std::string name, std::string type);
 std::string listAllFiles();
 Node* find(std::string name);
 Node* findHelper(std::string name, Node* node);
-
+std::string getPath(Node* node);
+bool changeDirectory(std::string name);
 };
 
 #endif

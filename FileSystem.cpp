@@ -10,23 +10,32 @@ FileSystem::FileSystem()
     this->current = root;
 }
 
-//this function traverses the file tree from the current directory all the way up to the root and builds a string which
-//represents the path to the current directory
-std::string FileSystem::printCurrentDirectory()
+//this function traverses the file tree from the current directory all the way up to the root and builds a string 
+//representation of the path to the current directory
+std::string FileSystem::getCurrentDirectory()
 {
-    std::string stringToReturn = "";
-    Node *currentDirectory = current;
+    return this->getPath(current);
+}
 
-    while (currentDirectory->getParent() != nullptr)
+
+//takes a node as a parametar and returns a string representation of its path
+std::string FileSystem::getPath(Node* node){
+    if(!node)
+        return "File/Directory doesn't exist.";
+
+    std::string stringToReturn = "";
+
+
+    while (node->getParent() != nullptr)
     {
-        stringToReturn.insert(0, "/" + currentDirectory->getName());
-        currentDirectory = currentDirectory->getParent();
+        stringToReturn.insert(0, "/" + node->getName());
+        node = node->getParent();
     }
     stringToReturn.insert(0, "/root");
     return stringToReturn;
 }
 
-//This function will create a file/directory in the current directory after ensuring that no files or directories with the specified name already exist
+//This function will create a file/directory in the current directory after ensuring that no file or directory with the specified name already exists
 bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
 {
     Node *directory = new Node(nullptr, current, name, type);
@@ -62,6 +71,8 @@ std::string FileSystem::listAllFiles()
     return returnString;
 }
 
+
+//this function takes the name of the file to be found as a parameter and calls the findHelper() function which will recursively search for the file in the filetree.
 Node *FileSystem::find(std::string name)
 {
     Node *node = root;
@@ -69,6 +80,33 @@ Node *FileSystem::find(std::string name)
     return findHelper(name, node);
 }
 
+
+//takes the name of a directory as a parameter and searches for it in the current directory. If it's found, sets the current directory to the one that's been found and returns true.
+//If nothing is found, the function returns false.
+bool FileSystem::changeDirectory(std::string name){
+   
+    if(name==".."&& current->getParent())
+        {
+        current=current->getParent();
+        return true;
+        }
+        else{
+            Node *node = current->getChild();
+            while(node->getNext()){
+                if(node->getName()==name && node->getFileType()=="D")
+                {
+                    current = node;
+                    return true;
+                }
+                node = node->getNext();
+            }
+        }
+
+    return false;
+}
+
+//this function takes in the name of the file to be found and recursively traverses the filetree from top to bottom in search for the required file.
+//the function will return a nullptr if no file with the specified name is found.
 Node *FileSystem::findHelper(std::string name, Node *node)
 {
 
@@ -98,3 +136,4 @@ Node *FileSystem::findHelper(std::string name, Node *node)
 
     return nullptr;
 }
+
