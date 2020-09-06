@@ -10,21 +10,20 @@ FileSystem::FileSystem()
     this->current = root;
 }
 
-//this function traverses the file tree from the current directory all the way up to the root and builds a string 
+//this function traverses the file tree from the current directory all the way up to the root and builds a string
 //representation of the path to the current directory
 std::string FileSystem::getCurrentDirectory()
 {
     return this->getPath(current);
 }
 
-
-//takes a node as a parametar and returns a string representation of its path
-std::string FileSystem::getPath(Node* node){
-    if(!node)
+//takes a node as a parameter and returns a string representation of its path
+std::string FileSystem::getPath(Node *node)
+{
+    if (!node)
         return "File/Directory doesn't exist.";
 
     std::string stringToReturn = "";
-
 
     while (node->getParent() != nullptr)
     {
@@ -65,12 +64,12 @@ std::string FileSystem::listAllFiles()
 
     while (file)
     {
+        std::cout << file->getName() << std::endl;
         returnString += file->getFileType() + "\t" + file->getName() + "\n";
         file = file->getNext();
     }
     return returnString;
 }
-
 
 //this function takes the name of the file to be found as a parameter and calls the findHelper() function which will recursively search for the file in the filetree.
 Node *FileSystem::find(std::string name)
@@ -80,27 +79,29 @@ Node *FileSystem::find(std::string name)
     return findHelper(name, node);
 }
 
-
 //takes the name of a directory as a parameter and searches for it in the current directory. If it's found, sets the current directory to the one that's been found and returns true.
 //If nothing is found, the function returns false.
-bool FileSystem::changeDirectory(std::string name){
-   
-    if(name==".."&& current->getParent())
-        {
-        current=current->getParent();
+bool FileSystem::changeDirectory(std::string name)
+{
+
+    if (name == ".." && current->getParent())
+    {
+        current = current->getParent();
         return true;
-        }
-        else{
-            Node *node = current->getChild();
-            while(node->getNext()){
-                if(node->getName()==name && node->getFileType()=="D")
-                {
-                    current = node;
-                    return true;
-                }
-                node = node->getNext();
+    }
+    else
+    {
+        Node *node = current->getChild();
+        while (node->getNext())
+        {
+            if (node->getName() == name && node->getFileType() == "D")
+            {
+                current = node;
+                return true;
             }
+            node = node->getNext();
         }
+    }
 
     return false;
 }
@@ -136,24 +137,72 @@ Node *FileSystem::findHelper(std::string name, Node *node)
 
     return nullptr;
 }
- bool FileSystem::rename(std::string from, std::string to){
-     Node *node = searchCurrentDirectory(from);
-    if(node){
+bool FileSystem::rename(std::string from, std::string to)
+{
+    Node *node = searchCurrentDirectory(from);
+    if (node)
+    {
         node->setName(to);
         return true;
     }
     return false;
 }
 
-Node* FileSystem::searchCurrentDirectory(std::string name){
+Node *FileSystem::searchCurrentDirectory(std::string name)
+{
     Node *node = current->getChild();
-            while(node->getNext()){
-                if(node->getName()==name)
-                {
-                    return node;
-                }
-                node = node->getNext();
-            }
-            return nullptr;
+    while (node->getNext())
+    {
+        if (node->getName() == name)
+        {
+            return node;
+        }
+        node = node->getNext();
+    }
+    return nullptr;
 }
 
+std::string FileSystem::removeNode(std::string name)
+{
+    Node *node = current->getChild();
+    Node *prev = nullptr;
+    while (node->getNext())
+    {
+
+        if (node->getName() == name)
+        {
+            current->addChild(node->getNext());
+            node->setNext(nullptr);
+            removeHelper(node);
+            return "File/Directory " + name + " deleted succesfully\n";
+        }
+        else if (node->getNext()->getName() == name)
+        {
+            prev = node;
+            node = node->getNext();
+            prev->setNext(node->getNext());
+            node->setNext(nullptr);
+            removeHelper(node);
+            return "File/directory " + name + " deleted successfully!\n";
+        }
+        node = node->getNext();
+    }
+
+    return "The file/directory" + name + "couldn't be found!\n";
+}
+
+void FileSystem::removeHelper(Node *node)
+{
+    if (!node)
+    {
+        return;
+    }
+    removeHelper(node->getChild());
+    removeHelper(node->getNext());
+    if (node)
+    {
+
+        std::cout << "Deleting: " << node->getName() << std::endl;
+        delete node;
+    }
+}

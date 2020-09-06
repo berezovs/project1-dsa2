@@ -10,6 +10,7 @@ Node::Node(){
 }
 
 Node::Node(Node *child, Node *parent, std::string name, std::string fileType){
+    this->next = nullptr;
     this->child =child;
     this->parent=parent;
     this->name=name;

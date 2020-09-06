@@ -20,6 +20,8 @@ std::string getPath(Node* node);
 bool changeDirectory(std::string name);
 bool rename(std::string from, std::string to);
 Node* searchCurrentDirectory(std::string name);
+std::string removeNode(std::string name);
+void removeHelper(Node * node);
 };
 
 #endif
