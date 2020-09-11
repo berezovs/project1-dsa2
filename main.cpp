@@ -23,7 +23,7 @@ int main()
     std::cout<<filesystem->removeNode("directory1")<<std::endl;
 
     std::cout<<filesystem->listAllFiles()<<std::endl;
-    
+   std::cout<< filesystem->copy("directory2", "dir3")<<std::endl;
     
     // std::cout<<filesystem->changeDirectory("directory2");
     
