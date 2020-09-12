@@ -24,7 +24,7 @@ public:
     std::string removeNode(std::string name);
     void removeHelper(Node *node);
     std::string copy(std::string from, std::string to);
-    Node* copyHelper(Node *from);
+    void copyHelper(Node *from);
 
 };
 

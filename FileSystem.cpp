@@ -35,7 +35,7 @@ std::string FileSystem::getPath(Node *node)
 }
 
 //This function will create a file/directory in the current directory after ensuring that no file or directory with the specified name already exists
- Node* FileSystem::makeDirectoryOrFile(std::string name, std::string type)
+Node *FileSystem::makeDirectoryOrFile(std::string name, std::string type)
 {
     Node *directory = new Node(nullptr, current, name, type);
 
@@ -212,24 +212,29 @@ std::string FileSystem::copy(std::string from, std::string to)
 
     if (this->searchCurrentDirectory(to))
     {
-        return "This name file/directory already exist!\n";
+        return "This name file/directory already exists!\n";
     }
     else
     {
-       Node *node  = this->makeDirectoryOrFile(to, "D");
-    }
+        Node *copyFrom = this->searchCurrentDirectory(from);
 
-    this->copyHelper(this->searchCurrentDirectory(from));
+        Node *copy(copyFrom);
+        copy->setNext(nullptr);
+        copyHelper(copy);
+        std::cout<<copy->getChild()->getName()<<std::endl;
+        std::cout<<copy->getChild()->getNext()->getName()<<std::endl;
+    }
     return "Successfully copied";
 }
 
+void FileSystem::copyHelper(Node *from)
+{
+    if (!from)
+        return;
 
-Node * FileSystem::copyHelper(Node* from){
-    if(!from)
-    return nullptr;
-    Node* newNode(from);
-    newNode->addChild(copyHelper(from->getChild()));
-    newNode->setNext(copyHelper(from->getNext()));
-
-    return newNode;
+    copyHelper(from->getChild());
+    copyHelper(from->getNext());
+    //std::cout << from->getName() << std::endl;
+    from->addChild(new Node(from->getChild()));
+    from->setNext(new Node(from->getNext()));
 }
