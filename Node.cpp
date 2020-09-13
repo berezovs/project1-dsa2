@@ -5,7 +5,7 @@ Node::Node()
 {
     this->child = nullptr;
     this->parent = nullptr;
-    this->name = nullptr;
+    this->name = "";
     this->fileType = "";
 }
 

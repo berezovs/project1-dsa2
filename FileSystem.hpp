@@ -13,7 +13,7 @@ public:
     FileSystem();
     void addFile(std::string name);
     std::string getCurrentDirectory();
-    Node* makeDirectoryOrFile(std::string name, std::string type);
+    bool makeDirectoryOrFile(std::string name, std::string type);
     std::string listAllFiles();
     Node *find(std::string name);
     Node *findHelper(std::string name, Node *node);
@@ -24,7 +24,9 @@ public:
     std::string removeNode(std::string name);
     void removeHelper(Node *node);
     std::string copy(std::string from, std::string to);
-    void copyHelper(Node *from);
+    void copyHelper(Node *from, Node* to);
+    bool addDorF(Node* newNode);
+  
 
 };
 

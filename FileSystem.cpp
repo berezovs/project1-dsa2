@@ -35,25 +35,51 @@ std::string FileSystem::getPath(Node *node)
 }
 
 //This function will create a file/directory in the current directory after ensuring that no file or directory with the specified name already exists
-Node *FileSystem::makeDirectoryOrFile(std::string name, std::string type)
+bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
 {
-    Node *directory = new Node(nullptr, current, name, type);
+    Node *newNode = new Node(nullptr, current, name, type);
 
-    if (!current->getChild())
+    if(this->addDorF(newNode))
+        return true;
+    return false;
+}
+
+
+//helper function that adds a file or directory to the current directory
+bool FileSystem::addDorF(Node *newNode)
+{
+
+    Node *node = current->getChild();
+    if (!node)
     {
-        current->addChild(directory);
+        current->addChild(newNode);
+        return true;
+    }
+    else if (node && newNode->getName() < node->getName())
+    {
+        newNode->setNext(node);
+        current->addChild(newNode);
+        return true;
     }
     else
     {
-        Node *child = current->getChild();
-        while (child->getNext())
+        while (node->getNext())
         {
-
-            child = child->getNext();
+            if (node->getNext()->getName() < newNode->getName())
+            {
+                node = node->getNext();
+                continue;
+            }
+            else
+            {
+                break;
+            }
         }
-        child->setNext(directory);
+        newNode->setNext(node->getNext());
+        node->setNext(newNode);
+        return true;
     }
-    return directory;
+    return false;
 }
 
 //This function will return a string containing the names of all the files and directories in the current directory
@@ -64,7 +90,6 @@ std::string FileSystem::listAllFiles()
 
     while (file)
     {
-        std::cout << file->getName() << std::endl;
         returnString += file->getFileType() + "\t" + file->getName() + "\n";
         file = file->getNext();
     }
@@ -137,6 +162,7 @@ Node *FileSystem::findHelper(std::string name, Node *node)
 
     return nullptr;
 }
+
 bool FileSystem::rename(std::string from, std::string to)
 {
     Node *node = searchCurrentDirectory(from);
@@ -217,24 +243,28 @@ std::string FileSystem::copy(std::string from, std::string to)
     else
     {
         Node *copyFrom = this->searchCurrentDirectory(from);
-
-        Node *copy(copyFrom);
-        copy->setNext(nullptr);
-        copyHelper(copy);
-        std::cout<<copy->getChild()->getName()<<std::endl;
-        std::cout<<copy->getChild()->getNext()->getName()<<std::endl;
+        Node *copy = new Node(nullptr, this->current, to, copyFrom->getFileType());
+        copyHelper(copyFrom->getChild(), copy);
+        this->addDorF(copy);
     }
     return "Successfully copied";
 }
 
-void FileSystem::copyHelper(Node *from)
+void FileSystem::copyHelper(Node *from, Node *to)
 {
-    if (!from)
-        return;
+    if (from)
+    {
 
-    copyHelper(from->getChild());
-    copyHelper(from->getNext());
-    //std::cout << from->getName() << std::endl;
-    from->addChild(new Node(from->getChild()));
-    from->setNext(new Node(from->getNext()));
-}
+        if (from->getChild())
+        {
+            std::cout << "Child of " << from->getChild()->getName() << std::endl;
+            copyHelper(from->getChild(), to);
+        }
+        if (from->getNext())
+        {
+            std::cout << "Next to " << from->getNext()->getName() << std::endl;
+            copyHelper(from->getNext(), to);
+    }
+          
+        }
+    }

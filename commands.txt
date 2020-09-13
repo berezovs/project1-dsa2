@@ -1,0 +1,33 @@
+ls
+pwd
+mkdir adir
+ls
+cd adir
+addf f1
+addf f3
+addf f4
+addf f2
+ls
+mkdir d1
+cd d1
+addf f3
+addf f2
+mv f3 f2
+mv f3 f4
+ls a
+ls
+whereis f2
+whereis querty
+whereis f3
+addf f6
+pwd
+ls
+cd ..
+pwd
+ls
+rm d1
+ls
+rm f5
+rm f4
+ls
+bye
