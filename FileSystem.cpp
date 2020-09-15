@@ -10,8 +10,7 @@ FileSystem::FileSystem()
     this->current = root;
 }
 
-//this function traverses the file tree from the current directory all the way up to the root and builds a string
-//representation of the path to the current directory
+//this function calls getPath() and returns a string representation of the current directory's path
 std::string FileSystem::getCurrentDirectory()
 {
     return this->getPath(current);
@@ -34,16 +33,19 @@ std::string FileSystem::getPath(Node *node)
     return stringToReturn;
 }
 
-//This function will create a file/directory in the current directory after ensuring that no file or directory with the specified name already exists
+//This function calls addDorF(Node *newNode) helper function that creates a new file/directory in the current directory.
+//The function will return true if the file/directory has been created successfully or false if the file/directory with the specified name already exists.
 bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
 {
+
+    if (this->searchCurrentDirectory(name))
+        return false;
     Node *newNode = new Node(nullptr, current, name, type);
 
-    if(this->addDorF(newNode))
+    if (this->addDorF(newNode))
         return true;
     return false;
 }
-
 
 //helper function that adds a file or directory to the current directory
 bool FileSystem::addDorF(Node *newNode)
@@ -117,6 +119,13 @@ bool FileSystem::changeDirectory(std::string name)
     else
     {
         Node *node = current->getChild();
+        if(!node)
+            return false;
+        if(node->getName()==name&& node->getFileType() == "D"){
+            current = node;
+            return true;
+        }
+
         while (node->getNext())
         {
             if (node->getName() == name && node->getFileType() == "D")
@@ -165,7 +174,9 @@ Node *FileSystem::findHelper(std::string name, Node *node)
 
 bool FileSystem::rename(std::string from, std::string to)
 {
-    Node *node = searchCurrentDirectory(from);
+    if (this->searchCurrentDirectory(to))
+        return false;
+    Node *node = this->searchCurrentDirectory(from);
     if (node)
     {
         node->setName(to);
@@ -177,6 +188,11 @@ bool FileSystem::rename(std::string from, std::string to)
 Node *FileSystem::searchCurrentDirectory(std::string name)
 {
     Node *node = current->getChild();
+    if (!node)
+        return nullptr;
+    if(node->getName()==name){
+        return node;
+    }
     while (node->getNext())
     {
         if (node->getName() == name)
@@ -188,7 +204,7 @@ Node *FileSystem::searchCurrentDirectory(std::string name)
     return nullptr;
 }
 
-std::string FileSystem::removeNode(std::string name)
+bool FileSystem::removeNode(std::string name)
 {
     Node *node = current->getChild();
     Node *prev = nullptr;
@@ -200,7 +216,7 @@ std::string FileSystem::removeNode(std::string name)
             current->addChild(node->getNext());
             node->setNext(nullptr);
             removeHelper(node);
-            return "File/Directory " + name + " deleted succesfully\n";
+            return true;
         }
         else if (node->getNext()->getName() == name)
         {
@@ -209,12 +225,12 @@ std::string FileSystem::removeNode(std::string name)
             prev->setNext(node->getNext());
             node->setNext(nullptr);
             removeHelper(node);
-            return "File/directory " + name + " deleted successfully!\n";
+            return true;
         }
         node = node->getNext();
     }
 
-    return "The file/directory" + name + "couldn't be found!\n";
+    return false;
 }
 
 void FileSystem::removeHelper(Node *node)
@@ -227,8 +243,6 @@ void FileSystem::removeHelper(Node *node)
     removeHelper(node->getNext());
     if (node)
     {
-
-        std::cout << "Deleting: " << node->getName() << std::endl;
         delete node;
     }
 }
@@ -264,7 +278,6 @@ void FileSystem::copyHelper(Node *from, Node *to)
         {
             std::cout << "Next to " << from->getNext()->getName() << std::endl;
             copyHelper(from->getNext(), to);
-    }
-          
         }
     }
+}

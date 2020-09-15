@@ -21,7 +21,7 @@ public:
     bool changeDirectory(std::string name);
     bool rename(std::string from, std::string to);
     Node *searchCurrentDirectory(std::string name);
-    std::string removeNode(std::string name);
+    bool removeNode(std::string name);
     void removeHelper(Node *node);
     std::string copy(std::string from, std::string to);
     void copyHelper(Node *from, Node* to);

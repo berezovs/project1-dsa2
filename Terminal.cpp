@@ -1,68 +1,123 @@
 #include <iostream>
-#include<fstream>
-#include<sstream>
+#include <fstream>
+#include <sstream>
 #include "Terminal.hpp"
 #include "FileSystem.hpp"
 
-Terminal::Terminal(std::string filename){
+Terminal::Terminal(std::string filename)
+{
     this->filename = filename;
     fileSystem = new FileSystem();
     this->loadCommandsFromFile();
-  
-    
 }
-void Terminal::loadCommandsFromFile(){
+void Terminal::loadCommandsFromFile()
+{
     std::string line, command, argument;
 
     this->commandFile.open(this->filename);
-    while(getline(commandFile, line)){
+    while (getline(commandFile, line))
+    {
         command = "";
-        argument= "";
+        argument = "";
         std::istringstream ss(line);
         getline(ss, command, ' ');
         getline(ss, argument);
 
         this->executeCommand(command, argument);
     }
-
-   
 }
 
- void Terminal::executeCommand(std::string command, std::string argument){
-        if(command=="ls"){
-            std::cout<<"$ "<<command<<" "<<std::endl;
-            std::cout<<fileSystem->listAllFiles()<<std::endl;
+void Terminal::executeCommand(std::string command, std::string argument)
+{
+    if (command == "ls")
+    {
+        std::cout << "$ " << command << " " << std::endl;
+        std::cout << fileSystem->listAllFiles() << std::endl;
+    }
+    else if (command == "pwd")
+    {
+        std::cout << "$ " << command << " " << std::endl;
+        std::cout << fileSystem->getCurrentDirectory() << std::endl;
+    }
+    else if (command == "mkdir")
+    {
+        std::cout << "$ " << command << " " << argument << std::endl;
+        if (fileSystem->makeDirectoryOrFile(argument, "D"))
+        {
+            std::cout << "Directory " << argument << " created!" << std::endl;
         }
-        else if(command =="pwd"){
-            std::cout<<"$ "<<command<<" "<<std::endl;
-             std::cout<<fileSystem->getCurrentDirectory()<<std::endl;
-        }
-        else if(command=="mkdir"){
-            std::cout<<"$ "<<command<<" "<<std::endl;
-           if( fileSystem->makeDirectoryOrFile(argument, "D")){
-               std::cout<<"Directory "<<argument<<" created!"<<std::endl;
-           }
-           std::cout<<"Directory "<<argument<<" already exists!"<<std::endl;
-        }
-        else if(command=="addf"){
-
-        }
-        else if(command=="mv"){
-
-        }
-        else if(command=="cp"){
-
-        }
-        else if(command=="cd"){
-
-        }
-        else if (command=="whereis"){
-
-        }
-        else if(command=="rm"){
-
-        }
-        else if(command=="bye"){
-            return;
+        else
+        {
+            std::cout << "Directory " << argument << " already exists!" << std::endl;
         }
     }
+    else if (command == "addf")
+    {
+        std::cout << "$ " << command << " " << argument << std::endl;
+        if (fileSystem->makeDirectoryOrFile(argument, "F"))
+        {
+            std::cout << "File " << argument << " created!" << std::endl;
+        }
+        else
+        {
+            std::cout << "File" << argument << " already exists!" << std::endl;
+        }
+    }
+    else if (command == "mv")
+    {
+        std::istringstream stringbuffer(argument);
+        std::string from, to;
+        getline(stringbuffer, from, ' ');
+        getline(stringbuffer, to, ' ');
+
+        std::cout << "$ " << command << " " << from << " " << to << std::endl;
+
+        if (fileSystem->rename(from, to))
+        {
+            std::cout << "File/directory successfully renamed from " << from << " to " << to << "!" << std::endl;
+        }
+        else
+        {
+            std::cout << "File/directory " << from << " could not be renamed!" << std::endl;
+        }
+    }
+    else if (command == "cp")
+    {
+    }
+    else if (command == "cd")
+    {
+        std::cout << "$ " << command << " " << argument << std::endl;
+        if (fileSystem->changeDirectory(argument))
+        {
+            std::cout << fileSystem->getCurrentDirectory()<<std::endl;
+        }
+        else
+        {
+            std::cout << "Directory could not be found." << std::endl;
+        }
+    }
+    else if (command == "whereis")
+
+    {
+        std::cout << "$ " << command << " " << argument << std::endl;
+        std::cout << fileSystem->getPath(fileSystem->find(argument)) << std::endl;
+    }
+    else if (command == "rm")
+    {
+        std::cout << "$ " << command << " " << argument << std::endl;
+        if (fileSystem->removeNode(argument))
+        {
+            std::cout << "File/Directory " << argument << " has been successfully removed." << std::endl;
+        }
+        else
+        {
+            std::cout << "File/Directory " << argument << " does not exist!" << std::endl;
+        }
+    }
+    else if (command == "bye")
+    {
+        std::cout << "$ " << command << std::endl;
+        std::cout << "Exiting command line..." << std::endl;
+        return;
+    }
+}
