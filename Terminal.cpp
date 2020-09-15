@@ -83,13 +83,23 @@ void Terminal::executeCommand(std::string command, std::string argument)
     }
     else if (command == "cp")
     {
+        std::istringstream stringbuffer(argument);
+        std::string from, to;
+        getline(stringbuffer, from, ' ');
+        getline(stringbuffer, to, ' ');
+
+        std::cout << "$ " << command << " " << from << " " << to << std::endl;
+        if (fileSystem->copy(from, to))
+        {
+            std::cout << "File/directory  " << from << " succesfully copied!" << std::endl;
+        }
     }
     else if (command == "cd")
     {
         std::cout << "$ " << command << " " << argument << std::endl;
         if (fileSystem->changeDirectory(argument))
         {
-            std::cout << fileSystem->getCurrentDirectory()<<std::endl;
+            std::cout << fileSystem->getCurrentDirectory() << std::endl;
         }
         else
         {

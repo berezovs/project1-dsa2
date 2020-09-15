@@ -118,25 +118,14 @@ bool FileSystem::changeDirectory(std::string name)
     }
     else
     {
-        Node *node = current->getChild();
-        if(!node)
-            return false;
-        if(node->getName()==name&& node->getFileType() == "D"){
+        Node *node = this->searchCurrentDirectory(name);
+
+        if (node && node->getFileType() == "D")
+        {
             current = node;
             return true;
         }
-
-        while (node->getNext())
-        {
-            if (node->getName() == name && node->getFileType() == "D")
-            {
-                current = node;
-                return true;
-            }
-            node = node->getNext();
-        }
     }
-
     return false;
 }
 
@@ -190,10 +179,11 @@ Node *FileSystem::searchCurrentDirectory(std::string name)
     Node *node = current->getChild();
     if (!node)
         return nullptr;
-    if(node->getName()==name){
+    if (node->getName() == name)
+    {
         return node;
     }
-    while (node->getNext())
+    while (node)
     {
         if (node->getName() == name)
         {
@@ -247,12 +237,12 @@ void FileSystem::removeHelper(Node *node)
     }
 }
 
-std::string FileSystem::copy(std::string from, std::string to)
+bool FileSystem::copy(std::string from, std::string to)
 {
 
     if (this->searchCurrentDirectory(to))
     {
-        return "This name file/directory already exists!\n";
+        return false;
     }
     else
     {
@@ -261,7 +251,7 @@ std::string FileSystem::copy(std::string from, std::string to)
         copyHelper(copyFrom->getChild(), copy);
         this->addDorF(copy);
     }
-    return "Successfully copied";
+    return true;
 }
 
 void FileSystem::copyHelper(Node *from, Node *to)

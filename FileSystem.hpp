@@ -23,11 +23,9 @@ public:
     Node *searchCurrentDirectory(std::string name);
     bool removeNode(std::string name);
     void removeHelper(Node *node);
-    std::string copy(std::string from, std::string to);
-    void copyHelper(Node *from, Node* to);
-    bool addDorF(Node* newNode);
-  
-
+    bool copy(std::string from, std::string to);
+    void copyHelper(Node *from, Node *to);
+    bool addDorF(Node *newNode);
 };
 
 #endif
