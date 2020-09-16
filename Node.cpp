@@ -9,9 +9,9 @@ Node::Node()
     this->fileType = "";
 }
 
-Node::Node(Node *child, Node *parent, std::string name, std::string fileType)
+Node::Node(Node *child, Node *parent, Node *next, std::string name, std::string fileType)
 {
-    this->next = nullptr;
+    this->next = next;
     this->child = child;
     this->parent = parent;
     this->name = name;

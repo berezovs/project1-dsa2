@@ -7,7 +7,7 @@
 
 int main()
 {
-Terminal *terminal = new Terminal("commands.txt");
-
-  return 0;
+    Terminal *terminal = new Terminal("commands.txt");
+    terminal->run();
+    return 0;
 }

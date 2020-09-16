@@ -12,7 +12,7 @@ class Node{
 
     public:
     Node();
-    Node(Node *child, Node *parent, std::string name, std::string fileType);
+    Node(Node *child, Node *parent,Node*next, std::string name, std::string fileType);
     Node(Node *source);
     Node *getChild();
     void addChild(Node *child);

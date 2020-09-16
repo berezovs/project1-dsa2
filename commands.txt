@@ -30,14 +30,23 @@ ls
 rm f5
 rm f4
 ls
-mkdir volder
+mkdir folder
 ls
-cd volder
+cd folder
 addf file1
 addf file2
 ls
 cd ..
 pwd
 ls
-cp f2 f4
+cd folder
+mkdir folder
+addf file1
+addf file2
+ls
+cd ..
+cp folder f4
+ls
+cd f4
+ls
 bye

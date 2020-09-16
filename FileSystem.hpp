@@ -9,22 +9,22 @@ private:
     Node *root;
     Node *current;
 
+    Node *findHelper(std::string name, Node *node);
+    void removeHelper(Node *node);
+    Node *copyHelper(Node *from);
+
 public:
     FileSystem();
-    void addFile(std::string name);
     std::string getCurrentDirectory();
     bool makeDirectoryOrFile(std::string name, std::string type);
     std::string listAllFiles();
     Node *find(std::string name);
-    Node *findHelper(std::string name, Node *node);
     std::string getPath(Node *node);
     bool changeDirectory(std::string name);
     bool rename(std::string from, std::string to);
     Node *searchCurrentDirectory(std::string name);
     bool removeNode(std::string name);
-    void removeHelper(Node *node);
     bool copy(std::string from, std::string to);
-    void copyHelper(Node *from, Node *to);
     bool addDorF(Node *newNode);
 };
 

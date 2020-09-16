@@ -8,8 +8,14 @@ Terminal::Terminal(std::string filename)
 {
     this->filename = filename;
     fileSystem = new FileSystem();
+    
+}
+
+void Terminal::run(){
     this->loadCommandsFromFile();
 }
+
+
 void Terminal::loadCommandsFromFile()
 {
     std::string line, command, argument;
@@ -129,5 +135,9 @@ void Terminal::executeCommand(std::string command, std::string argument)
         std::cout << "$ " << command << std::endl;
         std::cout << "Exiting command line..." << std::endl;
         return;
+    }
+    else
+    {
+        std::cout << "Unknown command" << std::endl;
     }
 }

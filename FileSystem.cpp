@@ -6,7 +6,7 @@
 //C-TOR; initializes the filesystem by creating a root directory and sets the current directory to the root directory
 FileSystem::FileSystem()
 {
-    this->root = new Node(nullptr, nullptr, "root", "D");
+    this->root = new Node(nullptr, nullptr,nullptr, "root", "D");
     this->current = root;
 }
 
@@ -40,7 +40,7 @@ bool FileSystem::makeDirectoryOrFile(std::string name, std::string type)
 
     if (this->searchCurrentDirectory(name))
         return false;
-    Node *newNode = new Node(nullptr, current, name, type);
+    Node *newNode = new Node(nullptr, current,nullptr, name, type);
 
     if (this->addDorF(newNode))
         return true;
@@ -129,8 +129,8 @@ bool FileSystem::changeDirectory(std::string name)
     return false;
 }
 
-//this function takes in the name of the file to be found and recursively traverses the filetree from top to bottom in search for the required file.
-//the function will return a nullptr if no file with the specified name is found.
+//this function takes in the name of the file to be found and recursively traverses the filetree from top to bottom in search for the required file/directory.
+//the function returns a nullptr if no file with the specified name is found.
 Node *FileSystem::findHelper(std::string name, Node *node)
 {
 
@@ -247,27 +247,23 @@ bool FileSystem::copy(std::string from, std::string to)
     else
     {
         Node *copyFrom = this->searchCurrentDirectory(from);
-        Node *copy = new Node(nullptr, this->current, to, copyFrom->getFileType());
-        copyHelper(copyFrom->getChild(), copy);
+        Node *copy = new Node(nullptr, this->current,nullptr, to, copyFrom->getFileType());
+        copy->addChild(copyHelper(copyFrom->getChild()));
         this->addDorF(copy);
     }
     return true;
 }
 
-void FileSystem::copyHelper(Node *from, Node *to)
+Node *FileSystem::copyHelper(Node *from)
 {
-    if (from)
+    if (from != nullptr)
     {
 
-        if (from->getChild())
+        if (from != nullptr)
         {
-            std::cout << "Child of " << from->getChild()->getName() << std::endl;
-            copyHelper(from->getChild(), to);
-        }
-        if (from->getNext())
-        {
-            std::cout << "Next to " << from->getNext()->getName() << std::endl;
-            copyHelper(from->getNext(), to);
+            Node *copy = new Node(copyHelper(from->getChild()), from->getParent(), copyHelper(from->getNext()), from->getName(), from->getFileType());
+            return copy;
         }
     }
+    return nullptr;
 }
