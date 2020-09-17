@@ -4,6 +4,7 @@
 #include "Terminal.hpp"
 #include "FileSystem.hpp"
 
+//C-TOR; initializes the filesystem
 Terminal::Terminal(std::string filename)
 {
     this->filename = filename;
@@ -11,11 +12,13 @@ Terminal::Terminal(std::string filename)
     
 }
 
+//calls the function that reads commands.txt
 void Terminal::run(){
     this->loadCommandsFromFile();
 }
 
 
+//reads commands.txt and calls the function that executes the command
 void Terminal::loadCommandsFromFile()
 {
     std::string line, command, argument;
@@ -33,6 +36,8 @@ void Terminal::loadCommandsFromFile()
     }
 }
 
+
+//executes commands read from commands.txt
 void Terminal::executeCommand(std::string command, std::string argument)
 {
     if (command == "ls")
@@ -66,7 +71,7 @@ void Terminal::executeCommand(std::string command, std::string argument)
         }
         else
         {
-            std::cout << "File" << argument << " already exists!" << std::endl;
+            std::cout << "File " << argument << " already exists!" << std::endl;
         }
     }
     else if (command == "mv")

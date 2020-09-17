@@ -10,11 +10,12 @@ class Terminal{
     std::ifstream commandFile;
     FileSystem *fileSystem;
 
+    void loadCommandsFromFile();
+    void executeCommand(std::string command, std::string argument);
+
     
     public:
     Terminal(std::string filename);
-    void loadCommandsFromFile();
-    void executeCommand(std::string command, std::string argument);
     void run();
 };
 

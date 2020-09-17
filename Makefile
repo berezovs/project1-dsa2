@@ -18,4 +18,4 @@ $(OBJECTS): $(HEADERS)
 
 
 clean:
-	$(RM) *.o *.gch core main test/TestCase
+	$(RM) *.o *.gch core main 

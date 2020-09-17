@@ -18,17 +18,7 @@ Node::Node(Node *child, Node *parent, Node *next, std::string name, std::string 
     this->fileType = fileType;
 }
 
-Node::Node(Node *source)
-{
-    if (!source)
-        return;
-    this->next = source->getNext();
-    this->child = source->getChild();
-    this->parent = source->getParent();
-    this->name = source->getName();
-    this->fileType = source->getFileType();
-}
-
+//All functions below are getters and setters for class variables
 Node *Node::getChild()
 {
     return this->child;

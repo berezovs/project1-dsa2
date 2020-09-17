@@ -129,7 +129,7 @@ bool FileSystem::changeDirectory(std::string name)
     return false;
 }
 
-//this function takes in the name of the file to be found and recursively traverses the filetree from top to bottom in search for the required file/directory.
+//this function takes in the name of the file to be found and searches the filetree for the required file/directory.
 //the function returns a nullptr if no file with the specified name is found.
 Node *FileSystem::findHelper(std::string name, Node *node)
 {
@@ -161,6 +161,7 @@ Node *FileSystem::findHelper(std::string name, Node *node)
     return nullptr;
 }
 
+//renames node
 bool FileSystem::rename(std::string from, std::string to)
 {
     if (this->searchCurrentDirectory(to))
@@ -174,6 +175,7 @@ bool FileSystem::rename(std::string from, std::string to)
     return false;
 }
 
+//searches current directory for a node whose name matches the string passed in as a parameter.
 Node *FileSystem::searchCurrentDirectory(std::string name)
 {
     Node *node = current->getChild();
@@ -194,6 +196,7 @@ Node *FileSystem::searchCurrentDirectory(std::string name)
     return nullptr;
 }
 
+//takes the name of the node that needs to be removed, searches for it in the current directory and removes it.
 bool FileSystem::removeNode(std::string name)
 {
     Node *node = current->getChild();
@@ -223,6 +226,7 @@ bool FileSystem::removeNode(std::string name)
     return false;
 }
 
+//recursively removes file/directory/subtree passed in as a parameter
 void FileSystem::removeHelper(Node *node)
 {
     if (!node)
@@ -237,6 +241,7 @@ void FileSystem::removeHelper(Node *node)
     }
 }
 
+//creates a copy of a file/directory/subtree and adds the copy to the filesystem while preserving the alphabetical order
 bool FileSystem::copy(std::string from, std::string to)
 {
 
@@ -254,6 +259,7 @@ bool FileSystem::copy(std::string from, std::string to)
     return true;
 }
 
+//receives a subtree as  a parameter and creates a copy of it using recursion
 Node *FileSystem::copyHelper(Node *from)
 {
     if (from != nullptr)
